@@ -381,7 +381,35 @@ function activatePage4Magic(){
     hearts.appendChild(h);
   }
 }
+
+  /* AUTO PLAY MUSIC ON WEBSITE OPEN */
+window.addEventListener("load", () => {
+  const playPromise = music.play();
+
+  if (playPromise !== undefined) {
+    playPromise.then(() => {
+      // Start muted, then gently unmute
+      music.muted = false;
+      music.volume = 0;
+    }).catch(() => {
+      // fallback handled by unlockAudio already
+    });
+
+    let v = 0;
+    const fadeIn = setInterval(() => {
+      if (v < 0.8) {
+        v += 0.02;
+        music.volume = v;
+      } else {
+        clearInterval(fadeIn);
+      }
+    }, 200);
+  }
+});
+
+  
 </script>
 
 </body>
 </html>
+
