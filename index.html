@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Garima 💖</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:linear-gradient(135deg,#ffd6e8,#ffe9f2);
+}
+
+/* Screens */
+.screen{
+  width:100vw;
+  min-height:100vh;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+.screen.active{display:flex;}
+
+.card{
+  background:white;
+  padding:35px;
+  border-radius:32px;
+  box-shadow:0 25px 60px rgba(255,105,180,.35);
+  max-width:740px;
+  width:100%;
+  position:relative;
+  text-align:center;
+  animation:fadeUp 1s ease;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+h1{
+  font-family:'Pacifico',cursive;
+  color:#ff4d88;
+  font-size:2.7rem;
+}
+h2{color:#ff3366;}
+
+button{
+  padding:14px 34px;
+  border:none;
+  border-radius:30px;
+  font-size:1.05rem;
+  cursor:pointer;
+}
+
+#yesBtn{background:#ff4d88;color:white;}
+#noBtn{background:#ddd;position:absolute;}
+
+.buttons{
+  margin-top:28px;
+  position:relative;
+  height:140px;
+}
+
+/* Back button */
+.back-btn{
+  position:absolute;
+  top:15px;
+  left:15px;
+  background:#ffe3ec;
+  color:#ff4d88;
+  padding:8px 16px;
+  border-radius:20px;
+}
+
+/* Gallery */
+.home-gallery{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin:24px 0;
+}
+
+.pic-card{
+  border-radius:22px;
+  border:3px solid #ff85a2;
+  box-shadow:0 10px 25px rgba(255,105,180,.35);
+  overflow:hidden;
+  background:white;
+  position:relative;
+  cursor:pointer;
+}
+
+.pic-card img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.pic-card span{
+  position:absolute;
+  top:6px;
+  right:6px;
+  background:white;
+  border-radius:50%;
+  padding:4px;
+}
+
+.caption{
+  font-size:.9rem;
+  color:#ff4d88;
+  padding:8px;
+}
+
+.pic-card.featured{
+  grid-column:span 2;
+}
+
+/* Home text */
+.home-text{
+  text-align:left;
+  line-height:1.9;
+  color:#444;
+  font-size:1.05rem;
+  margin-top:10px;
+}
+
+/* Viewer */
+.viewer{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+.viewer img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:22px;
+}
+.viewer.active{display:flex;}
+
+/* Page 3 text */
+.long-text{
+  max-height:60vh;
+  overflow-y:auto;
+  text-align:left;
+  line-height:1.9;
+  color:#444;
+}
+
+/* PAGE 4 BIG PHOTO */
+.memory-photo-big{
+  width:100%;
+  border-radius:30px;
+  border:4px solid #ff85a2;
+  overflow:hidden;
+  box-shadow:
+    0 0 25px rgba(255,105,180,.6),
+    0 0 60px rgba(255,105,180,.35);
+  margin:20px 0 24px;
+  position:relative;
+}
+
+.memory-photo-big img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.corner-heart{
+  position:absolute;
+  top:10px;
+  left:10px;
+  background:white;
+  border-radius:50%;
+  padding:6px;
+  font-size:24px;
+}
+
+.memory-paragraph{
+  text-align:left;
+  line-height:1.9;
+  font-size:1.05rem;
+  color:#444;
+}
+
+/* Soft reveal */
+.memory-photo-big,
+.memory-paragraph{
+  opacity:0;
+  transform:translateY(20px);
+  animation:softReveal 1.6s ease forwards;
+}
+
+.memory-paragraph{animation-delay:.5s;}
+
+@keyframes softReveal{
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* Floating hearts */
+.hearts{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+}
+
+.heart{
+  position:absolute;
+  bottom:-20px;
+  font-size:18px;
+  opacity:.6;
+  animation:floatUp linear infinite;
+}
+
+@keyframes floatUp{
+  to{transform:translateY(-120vh);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- MUSIC -->
+<audio id="bgMusic" autoplay muted loop>
+  <source src="Ye Tune Kya Kiya Song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Viewer -->
+<div class="viewer" id="viewer" onclick="closeViewer()">
+  <img id="viewerImg">
+</div>
+
+<!-- PAGE 1 -->
+<div class="screen active" id="screen1">
+  <div class="card">
+    <h1>Hey Garima! 💖</h1>
+    <h2>Will you be my Valentine?</h2>
+
+    <div class="home-gallery">
+      <div class="pic-card" onclick="openViewer(this)">
+        <span>💖</span><img src="home1.jpeg"><div class="caption">“I swear, your smile should come with a warning — it makes my heart forget how to behave.” 😌💗</div>
+      </div>
+      <div class="pic-card" onclick="openViewer(this)">
+        <span>🎀</span><img src="home2.jpeg"><div class="caption">With you, everything feels quieter and more peaceful.💕</div>
+      </div>
+      <div class="pic-card" onclick="openViewer(this)">
+        <span>💖</span><img src="home3.jpeg"><div class="caption">This moment is pure joy, and it feels even more special because it’s you.✨</div>
+      </div>
+      <div class="pic-card" onclick="openViewer(this)">
+        <span>🎀</span><img src="home4.jpeg"><div class="caption">Soft moments, warm smiles, and a feeling I never want to lose💗</div>
+      </div>
+      <div class="pic-card featured" onclick="openViewer(this)">
+        <span>💝</span><img src="home5.jpeg"><div class="caption">Out of all the moments I’ve lived, this one will always mean a little more. 💖🎀</div>
+      </div>
+    </div>
+
+    <div class="home-text">
+      <p>These photos aren’t just pictures they’re feelings I hold close.</p>
+      <p>Your smile makes everything feel lighter, warmer, and real.</p>
+      <p>This moment matters to me more than you know 💖.</p>
+    </div>
+
+    <div class="buttons">
+      <button id="yesBtn">Yes ❤️</button>
+      <button id="noBtn">No 🙄</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="screen" id="screen2">
+  <div class="card">
+    <button class="back-btn" onclick="goToScreen(1)">← Back</button>
+    <h2>Thank you for saying yes 💕</h2>
+    <p>You just made my heart smile.</p>
+    <button onclick="goToScreen(3)">Continue 💖</button>
+  </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="screen" id="screen3">
+  <div class="card">
+    <button class="back-btn" onclick="goToScreen(2)">← Back</button>
+    <h2>My Feelings For You 💘</h2>
+    <div class="long-text">
+      <p>Garima 💕, if I’m being honest, I never really saw this coming but now that you’re here, I can’t imagine things any other way. Somewhere along the way, without any effort or force, you became the person my heart feels calm with, the one my thoughts keep returning to 🌸. There’s something so comforting about you, something that makes even the loudest days feel quieter and the hardest moments feel lighter 🕊️. When I talk to you, time feels different, like it slows down just enough for me to breathe and smile ✨. You have this beautiful way of turning ordinary moments into memories without even trying, and I find myself cherishing the smallest things we share 🤍. With you, I feel safe being exactly who I am no pretending, no pressure just real happiness and warmth 💫. Even on days when everything feels off, the thought of you brings a soft smile to my face and reminds me that some things are truly worth holding onto 💭💓. I admire you more than I can properly say your kindness, your presence, and the quiet way you make life feel better just by being in it 🌹. I’m grateful for you, not just today or because it’s Valentine’s Day 💘, but for every moment you exist in my life. And if I had the choice again, I’d still choose you every time, without hesitation ❤️today, tomorrow, and all the days that come after 💖.</p>
+    </div>
+    <button onclick="goToScreen(4)">Our Memory 💝</button>
+  </div>
+</div>
+
+<!-- PAGE 4 -->
+<div class="screen" id="screen4">
+  <div class="card">
+    <div class="hearts" id="hearts"></div>
+    <button class="back-btn" onclick="goToScreen(3)">← Back</button>
+
+    <h2>My Favorite Memory 💕</h2>
+
+    <div class="memory-photo-big">
+      <span class="corner-heart">💖</span>
+      <img src="garima.jpeg">
+    </div>
+
+    <div class="memory-paragraph">
+      <p>Garima, being with you has quietly changed the way I see myself, the way I feel things, and the way I understand love. Before you, I didn’t realize how much warmth a single person could bring into someone’s life just by being there. With you, everything feels a little more meaningful conversations last longer in my mind, smiles stay with me, and even silence feels comfortable 🤍. You’ve become a place where my thoughts slow down, where my heart feels lighter, and where I don’t have to pretend to be anything other than who I really am.
+You have this beautiful way of making ordinary moments feel special without even trying. It’s in the way you smile, the way you react to small things, and the way your presence alone can change my mood. When I’m with you, I feel calmer, more patient, and more at peace than I ever expected to feel. You’ve taught me that love doesn’t always have to be loud or dramatic it can be soft, steady, and quietly powerful 💖.
+And yes, we have our fights sometimes. Small misunderstandings, moments where words come out wrong, or times when things feel a little distant. But even those moments matter to me. Because they show me that what we share is real. We don’t walk away; we try to understand. We might get upset, but we still care. And every time we come back from those moments, it reminds me that this isn’t something temporary it’s something worth working through. Our fights don’t scare me; they teach me patience, communication, and the importance of choosing each other even when things aren’t perfect 🤍.
+You’ve changed me in ways I’m genuinely grateful for. You’ve made me more thoughtful, more emotionally aware, and more willing to open my heart. You’ve helped me grow not by forcing anything, but simply by being you. Because of you, I’ve learned how important it is to listen, to understand feelings, and to value emotional connection. You’ve made me softer in the best way possible ✨.
+This photo holds more than just a memory it holds a feeling I can’t put into simple words. It reminds me of all the moments we’ve shared, the smiles, the quiet talks, the laughter, the small arguments, and the way we always find our way back to each other. It reminds me of how much you mean to me and how deeply you’ve become a part of my life 💕.
+No matter where life takes us, I’ll always be thankful for you for the calm you bring into my world, for the way you’ve changed me, and for the love that feels real because it’s honest. Being with you has taught me that the most beautiful relationships aren’t perfect; they’re built on understanding, effort, patience, and genuine care. And that’s exactly what you are to me a feeling I cherish, a connection I value, and someone who has truly made my world better just by being in it 💖.
+  </p>
+    </div>
+  </div>
+</div>
+
+<!-- Confetti -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<script>
+const music=document.getElementById("bgMusic");
+const yesBtn=document.getElementById("yesBtn");
+const noBtn=document.getElementById("noBtn");
+
+function unlockAudio(){
+  if(music.muted){
+    music.muted=false;
+    music.volume=0.8;
+  }
+}
+document.addEventListener("click",unlockAudio,{once:true});
+
+/* No dodge */
+noBtn.onmouseover=()=>{
+  noBtn.style.left=Math.random()*220+"px";
+  noBtn.style.top=Math.random()*90+"px";
+};
+
+/* Yes */
+yesBtn.onclick=()=>{
+  confetti({particleCount:180,spread:90,origin:{y:0.6}});
+  goToScreen(2);
+};
+
+function goToScreen(n){
+  unlockAudio();
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("screen"+n).classList.add("active");
+
+  if(n===4) activatePage4Magic();
+}
+
+function openViewer(el){
+  viewerImg.src=el.querySelector("img").src;
+  viewer.classList.add("active");
+}
+function closeViewer(){
+  viewer.classList.remove("active");
+}
+
+/* Page 4 magic */
+function activatePage4Magic(){
+  const hearts=document.getElementById("hearts");
+  hearts.innerHTML="";
+  for(let i=0;i<12;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerText=Math.random()>0.5?"💗":"💖";
+    h.style.left=Math.random()*100+"%";
+    h.style.animationDuration=8+Math.random()*6+"s";
+    hearts.appendChild(h);
+  }
+}
+</script>
+
+</body>
+</html>
