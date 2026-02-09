@@ -13,6 +13,7 @@ body{
   margin:0;
   font-family:'Poppins',sans-serif;
   background:linear-gradient(135deg,#ffd6e8,#ffe9f2);
+  overflow-x: hidden;
 }
 
 /* Screens */
@@ -36,6 +37,26 @@ body{
   position:relative;
   text-align:center;
   animation:fadeUp 1s ease;
+}
+
+/* Page 0 Romantic Styling */
+.welcome-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #ff85a2;
+}
+.enter-btn {
+    background: #ff4d88;
+    color: white;
+    font-size: 1.5rem !important;
+    padding: 20px 50px !important;
+    box-shadow: 0 10px 30px rgba(255, 77, 136, 0.4);
+    transition: transform 0.3s;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 @keyframes fadeUp{
@@ -230,18 +251,23 @@ button{
 
 <body>
 
-<!-- MUSIC -->
-<audio id="bgMusic" autoplay muted loop>
-  <source src="Ye Tune Kya Kiya Song.mp3" type="audio/mpeg">
+<audio id="bgMusic" loop>
+  <source src="123.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Viewer -->
 <div class="viewer" id="viewer" onclick="closeViewer()">
   <img id="viewerImg">
 </div>
 
-<!-- PAGE 1 -->
-<div class="screen active" id="screen1">
+<div class="screen active" id="screen0">
+    <div class="card welcome-card">
+        <h1>For You, Garima... 🌹</h1>
+        <p style="margin: 20px 0; color: #666;">I made something special just for you. Please turn up your volume.</p>
+        <button class="enter-btn" onclick="startEverything()">Open with Love ❤️</button>
+    </div>
+</div>
+
+<div class="screen" id="screen1">
   <div class="card">
     <h1>Hey Garima! 💖</h1>
     <h2>Will you be my Valentine?</h2>
@@ -277,7 +303,6 @@ button{
   </div>
 </div>
 
-<!-- PAGE 2 -->
 <div class="screen" id="screen2">
   <div class="card">
     <button class="back-btn" onclick="goToScreen(1)">← Back</button>
@@ -287,7 +312,6 @@ button{
   </div>
 </div>
 
-<!-- PAGE 3 -->
 <div class="screen" id="screen3">
   <div class="card">
     <button class="back-btn" onclick="goToScreen(2)">← Back</button>
@@ -299,7 +323,6 @@ button{
   </div>
 </div>
 
-<!-- PAGE 4 -->
 <div class="screen" id="screen4">
   <div class="card">
     <div class="hearts" id="hearts"></div>
@@ -324,67 +347,73 @@ No matter where life takes us, I’ll always be thankful for you for the calm yo
   </div>
 </div>
 
-<!-- Confetti -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
-const music=document.getElementById("bgMusic");
-const yesBtn=document.getElementById("yesBtn");
-const noBtn=document.getElementById("noBtn");
+const music = document.getElementById("bgMusic");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
 
-function unlockAudio(){
-  if(music.muted){
-    music.muted=false;
-    music.volume=0.8;
-  }
+// FUNCTION TO START EVERYTHING
+function startEverything() {
+    // 1. Play music
+    music.play().then(() => {
+        music.volume = 0;
+        let v = 0;
+        const fadeIn = setInterval(() => {
+            if (v < 0.8) {
+                v += 0.05;
+                music.volume = v;
+            } else {
+                clearInterval(fadeIn);
+            }
+        }, 100);
+    }).catch(e => console.log("Playback error:", e));
+
+    // 2. Move to Page 1
+    goToScreen(1);
 }
-document.addEventListener("click",unlockAudio,{once:true});
 
-/* No dodge */
-noBtn.onmouseover=()=>{
-  noBtn.style.left=Math.random()*220+"px";
-  noBtn.style.top=Math.random()*90+"px";
+/* No dodge logic */
+noBtn.onmouseover = () => {
+  const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+  const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+  noBtn.style.position = 'fixed'; 
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
 };
 
-/* Yes */
-yesBtn.onclick=()=>{
+/* Yes click */
+yesBtn.onclick = () => {
   confetti({particleCount:180,spread:90,origin:{y:0.6}});
   goToScreen(2);
 };
 
 function goToScreen(n){
-  function unlockAudio(){
-  if(music.paused){
-    music.play().catch(()=>{});
-  }
-  music.muted=false;
-  music.volume=0.8;
-}
-
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("screen"+n).classList.add("active");
-
   if(n===4) activatePage4Magic();
+  window.scrollTo(0,0);
 }
 
 function openViewer(el){
-  viewerImg.src=el.querySelector("img").src;
-  viewer.classList.add("active");
-}
-function closeViewer(){
-  viewer.classList.remove("active");
+  document.getElementById("viewerImg").src = el.querySelector("img").src;
+  document.getElementById("viewer").classList.add("active");
 }
 
-/* Page 4 magic */
+function closeViewer(){
+  document.getElementById("viewer").classList.remove("active");
+}
+
 function activatePage4Magic(){
-  const hearts=document.getElementById("hearts");
-  hearts.innerHTML="";
+  const hearts = document.getElementById("hearts");
+  hearts.innerHTML = "";
   for(let i=0;i<12;i++){
-    const h=document.createElement("div");
-    h.className="heart";
-    h.innerText=Math.random()>0.5?"💗":"💖";
-    h.style.left=Math.random()*100+"%";
-    h.style.animationDuration=8+Math.random()*6+"s";
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerText = Math.random()>0.5?"💗":"💖";
+    h.style.left = Math.random()*100+"%";
+    h.style.animationDuration = 8+Math.random()*6+"s";
     hearts.appendChild(h);
   }
 }
