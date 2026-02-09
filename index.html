@@ -192,6 +192,20 @@ button{
   color:#444;
 }
 
+/* Soft reveal */
+.memory-photo-big,
+.memory-paragraph{
+  opacity:0;
+  transform:translateY(20px);
+  animation:softReveal 1.6s ease forwards;
+}
+
+.memory-paragraph{animation-delay:.5s;}
+
+@keyframes softReveal{
+  to{opacity:1;transform:translateY(0);}
+}
+
 /* Floating hearts */
 .hearts{
   position:absolute;
@@ -279,7 +293,7 @@ button{
     <button class="back-btn" onclick="goToScreen(2)">← Back</button>
     <h2>My Feelings For You 💘</h2>
     <div class="long-text">
-      <p>Garima 💕, if I’m being honest, I never really saw this coming...</p>
+      <p>Garima 💕, if I’m being honest, I never really saw this coming but now that you’re here, I can’t imagine things any other way. Somewhere along the way, without any effort or force, you became the person my heart feels calm with, the one my thoughts keep returning to 🌸. There’s something so comforting about you, something that makes even the loudest days feel quieter and the hardest moments feel lighter 🕊️. When I talk to you, time feels different, like it slows down just enough for me to breathe and smile ✨. You have this beautiful way of turning ordinary moments into memories without even trying, and I find myself cherishing the smallest things we share 🤍. With you, I feel safe being exactly who I am no pretending, no pressure just real happiness and warmth 💫. Even on days when everything feels off, the thought of you brings a soft smile to my face and reminds me that some things are truly worth holding onto 💭💓. I admire you more than I can properly say your kindness, your presence, and the quiet way you make life feel better just by being in it 🌹. I’m grateful for you, not just today or because it’s Valentine’s Day 💘, but for every moment you exist in my life. And if I had the choice again, I’d still choose you every time, without hesitation ❤️today, tomorrow, and all the days that come after 💖.</p>
     </div>
     <button onclick="goToScreen(4)">Our Memory 💝</button>
   </div>
@@ -288,7 +302,9 @@ button{
 <!-- PAGE 4 -->
 <div class="screen" id="screen4">
   <div class="card">
+    <div class="hearts" id="hearts"></div>
     <button class="back-btn" onclick="goToScreen(3)">← Back</button>
+
     <h2>My Favorite Memory 💕</h2>
 
     <div class="memory-photo-big">
@@ -297,11 +313,18 @@ button{
     </div>
 
     <div class="memory-paragraph">
-      <p>Garima, being with you has quietly changed the way I see myself...</p>
+      <p>Garima, being with you has quietly changed the way I see myself, the way I feel things, and the way I understand love. Before you, I didn’t realize how much warmth a single person could bring into someone’s life just by being there. With you, everything feels a little more meaningful conversations last longer in my mind, smiles stay with me, and even silence feels comfortable 🤍. You’ve become a place where my thoughts slow down, where my heart feels lighter, and where I don’t have to pretend to be anything other than who I really am.
+You have this beautiful way of making ordinary moments feel special without even trying. It’s in the way you smile, the way you react to small things, and the way your presence alone can change my mood. When I’m with you, I feel calmer, more patient, and more at peace than I ever expected to feel. You’ve taught me that love doesn’t always have to be loud or dramatic it can be soft, steady, and quietly powerful 💖.
+And yes, we have our fights sometimes. Small misunderstandings, moments where words come out wrong, or times when things feel a little distant. But even those moments matter to me. Because they show me that what we share is real. We don’t walk away; we try to understand. We might get upset, but we still care. And every time we come back from those moments, it reminds me that this isn’t something temporary it’s something worth working through. Our fights don’t scare me; they teach me patience, communication, and the importance of choosing each other even when things aren’t perfect 🤍.
+You’ve changed me in ways I’m genuinely grateful for. You’ve made me more thoughtful, more emotionally aware, and more willing to open my heart. You’ve helped me grow not by forcing anything, but simply by being you. Because of you, I’ve learned how important it is to listen, to understand feelings, and to value emotional connection. You’ve made me softer in the best way possible ✨.
+This photo holds more than just a memory it holds a feeling I can’t put into simple words. It reminds me of all the moments we’ve shared, the smiles, the quiet talks, the laughter, the small arguments, and the way we always find our way back to each other. It reminds me of how much you mean to me and how deeply you’ve become a part of my life 💕.
+No matter where life takes us, I’ll always be thankful for you for the calm you bring into my world, for the way you’ve changed me, and for the love that feels real because it’s honest. Being with you has taught me that the most beautiful relationships aren’t perfect; they’re built on understanding, effort, patience, and genuine care. And that’s exactly what you are to me a feeling I cherish, a connection I value, and someone who has truly made my world better just by being in it 💖.
+  </p>
     </div>
   </div>
 </div>
 
+<!-- Confetti -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
@@ -309,20 +332,13 @@ const music=document.getElementById("bgMusic");
 const yesBtn=document.getElementById("yesBtn");
 const noBtn=document.getElementById("noBtn");
 
-/* 🔊 AUTO PLAY ON SITE OPEN (CHROME SAFE) */
-window.addEventListener("load",()=>{
-  music.play().then(()=>{
+function unlockAudio(){
+  if(music.muted){
     music.muted=false;
-    music.volume=0;
-    let v=0;
-    const fade=setInterval(()=>{
-      if(v<0.8){
-        v+=0.02;
-        music.volume=v;
-      }else clearInterval(fade);
-    },200);
-  }).catch(()=>{});
-});
+    music.volume=0.8;
+  }
+}
+document.addEventListener("click",unlockAudio,{once:true});
 
 /* No dodge */
 noBtn.onmouseover=()=>{
@@ -337,8 +353,18 @@ yesBtn.onclick=()=>{
 };
 
 function goToScreen(n){
+  function unlockAudio(){
+  if(music.paused){
+    music.play().catch(()=>{});
+  }
+  music.muted=false;
+  music.volume=0.8;
+}
+
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("screen"+n).classList.add("active");
+
+  if(n===4) activatePage4Magic();
 }
 
 function openViewer(el){
@@ -347,6 +373,20 @@ function openViewer(el){
 }
 function closeViewer(){
   viewer.classList.remove("active");
+}
+
+/* Page 4 magic */
+function activatePage4Magic(){
+  const hearts=document.getElementById("hearts");
+  hearts.innerHTML="";
+  for(let i=0;i<12;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerText=Math.random()>0.5?"💗":"💖";
+    h.style.left=Math.random()*100+"%";
+    h.style.animationDuration=8+Math.random()*6+"s";
+    hearts.appendChild(h);
+  }
 }
 </script>
 
